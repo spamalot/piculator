@@ -1,0 +1,89 @@
+---
+layout: piculator
+---
+
+<div id="mainarea">
+
+<div class="block">
+    <h1>Input</h1>
+
+    <h2>Control</h2>
+    <div class="buttonarea">
+      <button id="button-playpause" title="Run Continuously" onclick="playpause()">
+        <i class="fas fa-play play-text"></i>
+        <i class="fas fa-pause pause-text"></i>
+      </button>
+      <button id="button-advance" title="Do One Iteration" onclick="advance()"><i class="fas fa-step-forward"></i></button>
+      <button id="button-restart" title="Reset" onclick="restart()"><i class="fas fa-redo"></i></button>
+    </div>
+
+    <h2>Speed Limit</h2>
+    <div class="speedarea">
+      <input type="range" min="0" max="100" value="70" step="1" class="slider" id="range-speed">
+      <div class="range-speed-slow">Slow</div>
+      <div class="range-speed-fast">Fast</div>
+    </div>
+
+    <h2>Decimal Places</h2>
+    <div class="precisionarea">
+      {% include prec_button.html value="100" %}
+      {% include prec_button.html value="500" %}
+      {% include prec_button.html value="1000" %}
+      {% include prec_button.html value="2000" %}
+    </div>
+
+    <h2>Algorithm</h2>
+    <div class="algoarea">
+      {% include algo_button.html
+        id="leibniz"
+        name="Leibniz"
+        link="Leibniz_formula_for_pi"
+        formula="$$\pi = 4\sum\limits_{k=0}^\infty \frac{(-1)^{k}}{2k + 1}$$"
+        %}
+      {% include algo_button.html
+        id="borwein"
+        name="Borwein"
+        link="Borwein's_algorithm#Class_number_4_.281993.29"
+        %}
+      {% include algo_button.html
+        id="borwein_nonic"
+        name="Borwein (nonic)"
+        link="Borwein's_algorithm#Nonic_convergence"
+        %}
+      {% include algo_button.html
+        id="bbp"
+        name="Bailey-Borwein-Plouffe"
+        link="Bailey-Borwein-Plouffe_formula"
+        formula="$$\pi = \sum\limits_{k=0}^\infty \left(\frac{1}{16^{k}}\left(\frac{4}{8k + 1} - \frac{2}{8k + 4} - \frac{1}{8k+5} - \frac{1}{8k + 6}\right)\right)$$"
+        %}
+      {% include algo_button.html
+        id="gauss_legendre"
+        name="Gauss-Legendre"
+        link="Gauss-Legendre_algorithm"
+        %}
+      {% include algo_button.html
+        id="chudnovsky"
+        name="Chudnovsky"
+        link="Chudnovsky_algorithm"
+        formula="$$\pi = \frac{1}{12\sum\limits_{k=0}^\infty \frac{(-1)^{k}(6k)!(13591409 + 545140134k)}{(3k)!(k!)^3(640320^{3k + \frac{3}{2}})}}$$"
+        %}
+    </div>
+
+  </div>
+
+  <div id="output-block" class="block">
+    <h1>Output</h1>
+
+    <pre id="output"></pre>
+  </div>
+
+  <div class="block">
+    <h1>Code</h1>
+
+
+    <code id="code"></code>
+  </div>
+
+  <div id="error-overlay"></div>
+
+</div>

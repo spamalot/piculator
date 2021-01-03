@@ -1,0 +1,15 @@
+
+<input type="radio" id="algo-{{ include.id }}" name="algo" value="{{ include.id }}" onchange="algoChanged('{{ include.id }}')">
+<label for="algo-{{ include.id }}">
+  {% if include.formula %}
+  <div class="formulanamearea">
+  {% else %}
+  <div class="formulanamearea noformula">
+  {% endif %}
+    <div class="formulaname">{{ include.name }}</div>
+    <a title="See on Wikipedia" target="_blank" href="https://en.wikipedia.org/wiki/{{ include.link }}"><i class="fab fa-wikipedia-w"></i></a>
+  </div>
+  {% if include.formula %}
+  <div class="formula" tabindex="0">{{ include.formula }}</div>
+  {% endif %}
+</label>

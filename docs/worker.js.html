@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: worker.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: worker.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//---
+//---
+//{% comment %} Comment this line and the above two to run JSDoc. {% endcomment %}
+
+/**
+* @file Web worker that computes pi and formats the result for display.
+* @copyright 2021 Aarmale and Spamalot
+* @license
+* This file is part of Piculator.
+*
+* Piculator is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Piculator is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Piculator.  If not, see &lt;https://www.gnu.org/licenses/>.
+*/
+
+importScripts('{{ "/lib/decimal.js-light/decimal.min.js" | prepend: site.baseurl }}');
+importScripts('{{ "/algos.js" | prepend: site.baseurl }}');
+
+
+/**
+ * Last truncated but unformatted value of pi.
+ * @type {string}
+ * @default
+ */
+let lastPi = "";
+
+/** Generator iterator. */
+let gen;
+
+
+/**
+ * Truncate pi to the specified precision and pad with zeros to ensure
+ * consistent length.
+ * @param {string} val - Full untruncated result from computation
+ */
+function piTruncate(val) {
+  // prec in algos.js
+  const truncated = val.slice(0, prec+2);
+  const withpoint = truncated.includes('.') ? truncated : truncated+'.';
+  return withpoint.padEnd(prec+2, '0');
+}
+
+/**
+ * Formats the per-decimal place differences between newPi and lastPi
+ * using CSS classes (coloured via CSS).
+ * @param {string} newPi - Unformatted, but truncated pi to display
+ */
+function piDiff(newPi) {
+  if (newPi.length !== lastPi.length) {
+    return newPi;
+  }
+  return newPi.split('').map(function(x, i) {
+    if (x === '.') {
+      return x;
+    }
+    let delta = Math.abs(parseInt(x) - parseInt(lastPi.charAt(i)));
+    if (delta === 0) {
+      return x;
+    }
+    return `&lt;span class="x${delta}">${x}&lt;/span>`;
+  }).join('');
+}
+
+
+onmessage = (e) => {
+  if (e.data.type === 'init') {
+    setPrec(e.data.prec);
+    gen = algoMap[e.data.algo]();
+  }
+
+  if (e.data.type === 'advance') {
+    const newPi = piTruncate(gen.next().value.toString());
+    const output = piDiff(newPi);
+    lastPi = newPi;
+    postMessage(output);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#advance">advance</a></li><li><a href="global.html#algo">algo</a></li><li><a href="global.html#algoChanged">algoChanged</a></li><li><a href="global.html#algoMap">algoMap</a></li><li><a href="global.html#animationFrame">animationFrame</a></li><li><a href="global.html#applyState">applyState</a></li><li><a href="global.html#autoAdvance">autoAdvance</a></li><li><a href="global.html#cachedOutput">cachedOutput</a></li><li><a href="global.html#checkCompatibilityProblem">checkCompatibilityProblem</a></li><li><a href="global.html#decimaljsPowCheck">decimaljsPowCheck</a></li><li><a href="global.html#factorial">factorial</a></li><li><a href="global.html#gen">gen</a></li><li><a href="global.html#intPow">intPow</a></li><li><a href="global.html#lastAdvanceTime">lastAdvanceTime</a></li><li><a href="global.html#lastPi">lastPi</a></li><li><a href="global.html#makeCodeWrappable">makeCodeWrappable</a></li><li><a href="global.html#MIN_ADVANCE_TIME">MIN_ADVANCE_TIME</a></li><li><a href="global.html#mthRoot">mthRoot</a></li><li><a href="global.html#onAdvanced">onAdvanced</a></li><li><a href="global.html#onLoaded">onLoaded</a></li><li><a href="global.html#piDiff">piDiff</a></li><li><a href="global.html#piTruncate">piTruncate</a></li><li><a href="global.html#playpause">playpause</a></li><li><a href="global.html#precChanged">precChanged</a></li><li><a href="global.html#restart">restart</a></li><li><a href="global.html#scheduleAutoAdvance">scheduleAutoAdvance</a></li><li><a href="global.html#setPrec">setPrec</a></li><li><a href="global.html#State">State</a></li><li><a href="global.html#state">state</a></li><li><a href="global.html#updateOutput">updateOutput</a></li><li><a href="global.html#worker">worker</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Jan 03 2021 17:56:26 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

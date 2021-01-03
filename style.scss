@@ -1,0 +1,386 @@
+---
+---
+
+$radio-label: "input[type='radio']+label";
+$checked-radio-label: "input[type='radio']:checked+label";
+$focused-radio-label: "input[type='radio']:focus+label";
+$bgcol: #fff;
+$textcol: #111;
+$activetextcol: #0048ab;
+$disabledtextcol: #888;
+$mincolwidth: 100px;
+
+
+@mixin appearance-none {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+body {
+  font-family: 'Noto Serif', serif;
+  font-weight: 400;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 32px;
+  background: $bgcol;
+  color: $textcol;
+}
+
+body.waiting * {
+  cursor: progress;
+}
+
+.title {
+  font-family: 'Trirong', serif;
+  font-weight: 300;
+  font-size: 100px;
+  text-align: center;
+}
+
+pre, code {
+  font-family: 'PT Mono', monospace;
+  font-weight: 400;
+  margin: 0;
+  margin-top: 24px;
+
+}
+
+pre {
+  line-height: 22px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: #000;
+}
+
+code {
+  line-height: 27px;
+  white-space: normal;
+  overflow-wrap: break-word;  // For some compatibility with older Webkit.
+  overflow-wrap: anywhere;
+}
+
+// Overwrite highlight.js config -- could look bad for some styles.
+.hljs.hljs {
+  background: $bgcol;
+  padding: 0;
+}
+
+#mainarea {
+  flex: 1 0 auto;
+  display: grid;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1800px;
+  grid-template-columns: repeat(3, minmax($mincolwidth, 1fr));
+  grid-gap: 32px;  // Support for older browsers.
+  gap: 32px;
+}
+
+@media screen and (max-width: 1200px) {
+  #mainarea {
+    grid-template-columns: repeat(2, minmax($mincolwidth, 1fr));
+
+    div:nth-child(3) { grid-column: 1 / 3; }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  #mainarea {
+    max-width: 600px;
+    grid-template-columns: minmax($mincolwidth, 1fr);
+
+    div:nth-child(3) { grid-column: 1; }
+  }
+
+  .title {
+    font-size: 11vw;
+  }
+}
+
+#error-overlay {
+  display: none;
+}
+
+#mainarea.error {
+  display: block;
+
+  * {
+    display: none;
+  }
+
+  #error-overlay {
+    display: block;
+    text-align: center;
+    font-weight: 700;
+  }
+}
+
+.block {
+  border-top: 2px solid $textcol;
+  border-bottom: 2px solid $textcol;
+  padding: 8px 0 16px 0;
+  min-width: $mincolwidth;  // Fix grid "blowout" in older browsers.
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 100%;
+  text-transform: uppercase;
+  margin: 0px;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 100%;
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+
+input[type="radio"] {
+  @include appearance-none;
+  position: absolute;
+}
+
+#{$radio-label}, button {
+  border: 2px solid $textcol;
+  box-sizing: border-box;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  flex: 1 0 auto;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+}
+
+button {
+  @include appearance-none;
+  background: $bgcol;
+  color: $textcol;
+  padding: 8px;
+  font-size: inherit;
+}
+
+button > .pause-text, button.running > .play-text {
+  display: none;
+}
+
+button.running > .pause-text {
+  display: inline;
+}
+
+
+#{$radio-label} {
+
+  .formula {
+    background: none;
+    color: $textcol;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+
+    width: calc(100% + 4px);
+    margin-bottom: -2px;
+    margin-left: -2px;
+
+    // Animation Start
+    transition: max-height 0.2s;
+    max-height: 0;
+    border: 0 solid $textcol;
+    padding: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 0; right: 0;
+    }
+  }
+
+  .formulanamearea {
+    position: relative;
+    z-index: 2;
+    padding: 8px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    display: flex;
+
+    > .formulaname { flex: 1 0 auto; }
+
+    > a { display: none; }
+  }
+}
+
+#{$radio-label}:hover, #{$focused-radio-label}, button:hover, button:focus {
+  text-decoration: underline;
+  color: $activetextcol;
+}
+
+button:disabled {
+  cursor: auto;
+  border-color: $disabledtextcol;
+  color: $disabledtextcol;
+}
+
+body.waiting button:disabled { cursor: progress; }
+
+a {
+  color: $activetextcol;
+
+  &:visited { color: #7200ab; }
+}
+
+#{$checked-radio-label} {
+  cursor: auto;
+  font-weight: 700;
+
+  &:hover .formula, .formula:focus {
+    background: $bgcol;
+    overflow-x: visible;
+    overflow-y: hidden; // Math output must be less than max-height value
+    min-width: min-content;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .formula {
+    // Animation Stop
+    border-width: 2px;
+    max-height: 200px;
+    padding: 8px;
+
+    &::before {
+      z-index: 1;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 85%, $bgcol 98%);
+    }
+  }
+
+  .formulanamearea {
+    border-bottom-color: $bgcol;
+
+    &.noformula { border-bottom-color: transparent; }
+
+    > a { display: block; }
+  }
+}
+
+.precisionarea, .algoarea, .buttonarea {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.precisionarea {
+  > #{$checked-radio-label} { border-bottom-width: 6px; }
+
+  label { padding: 8px; }
+}
+
+.algoarea {
+  flex-direction: column;
+
+  > #{$checked-radio-label} { border-left-width: 6px; }
+}
+
+.precisionarea > #{$radio-label}:last-of-type, .algoarea > #{$radio-label} {
+  margin-right: 0;
+}
+
+.precisionarea > #{$radio-label}, .algoarea > #{$radio-label}:last-of-type {
+  margin-bottom: 0;
+}
+
+.buttonarea > button {
+  margin-bottom: 0;
+}
+
+.buttonarea > button:last-of-type {
+  margin-right: 0;
+}
+
+.speedarea {
+  text-transform: uppercase;
+  font-size: 80%;
+  display: flex;
+
+  // Force labels onto new line.
+  flex-wrap: wrap;
+
+  // Show labels on opposite ends of the scale.
+  .range-speed-fast {
+    flex: 1 1 auto;
+    text-align: right;
+  }
+}
+
+
+input[type=range] {
+  @include appearance-none;
+  width: 100%;
+  height: 40px;
+  margin: 0;
+}
+
+@mixin input-range-thumb {
+  @include appearance-none;
+  border: 2px solid $textcol;
+  height: 36px;
+  width: 36px;
+  box-sizing: border-box;
+  background: $bgcol;
+  cursor: pointer;
+
+  &:hover, &:active {
+    background: $activetextcol;
+  }
+}
+
+@mixin input-range-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: $textcol;
+}
+
+// Need to repeat code here because browsers drop entire thing if any
+// part is not understood.
+
+input[type=range]::-webkit-slider-thumb {
+  @include input-range-thumb;
+  margin-top: -17px;
+}
+
+input[type=range]::-moz-range-thumb {
+  @include input-range-thumb;
+  border-radius: 0;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  @include input-range-track;
+}
+
+input[type=range]::-moz-range-track {
+  @include input-range-track;
+}
+
+
+
+.x1 { background: #e6f5d8; color: #000; }
+.x2 { background: #c1f0bf; color: #000; }
+.x3 { background: #99e9b9; color: #000; }
+.x4 { background: #78dbc2; color: #000; }
+.x5 { background: #65c5d3; color: #fff; }
+.x6 { background: #63a6e2; color: #fff; }
+.x7 { background: #6f83e3; color: #fff; }
+.x8 { background: #8160d2; color: #fff; }
+.x9 { background: #9042af; color: #fff; }
+
+footer {
+    margin: 32px;
+    text-align: center;
+}
