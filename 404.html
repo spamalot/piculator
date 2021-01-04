@@ -1,4 +1,27 @@
 ---
-layout: error_page
 title: "πculator – Error 404: Page not found"
 ---
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  {% include head.html %}
+
+  </head>
+
+  <body>
+
+    <header>
+      <a href="{{ "/" | prepend: site.baseurl }}">
+        {% include piculator_lettering.html %}
+      </a>
+    </header>
+
+    <div style="text-align:center">Error 404: Page not found</div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

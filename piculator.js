@@ -349,6 +349,33 @@ function applyState(newState) {
 
 
 /**
+ * Hide the help screen if it is visible.
+ */
+function hideHelp() {
+  document.body.classList.remove('help-shown');
+}
+
+
+/**
+ * Show the help screen if it is hidden.
+ */
+function showHelp() {
+  document.body.classList.add('help-shown');
+}
+
+
+/**
+ * Called when key pressed. Hides the help screen when Esc is pressed.
+ * @param {Object} e - Event
+ */
+function onKeyPress(e) {
+  if(e.key === 'Escape') {
+    hideHelp();
+  }
+}
+
+
+/**
  * Called when DOM loads. Sets the default precision and algorithm,
  * then starts auto advancing.
  */
@@ -359,6 +386,8 @@ function onLoaded() {
   algoChanged('leibniz');
 
   playpause();
+
+  document.body.addEventListener('keydown', onKeyPress);
 }
 
 

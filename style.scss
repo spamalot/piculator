@@ -9,6 +9,7 @@ $textcol: #111;
 $activetextcol: #0048ab;
 $disabledtextcol: #888;
 $mincolwidth: 100px;
+$font-size: 20px;
 
 
 @mixin appearance-none {
@@ -20,7 +21,7 @@ $mincolwidth: 100px;
 body {
   font-family: 'Noto Serif', serif;
   font-weight: 400;
-  font-size: 20px;
+  font-size: $font-size;
   display: flex;
   flex-direction: column;
   margin: 32px;
@@ -32,11 +33,12 @@ body.waiting * {
   cursor: progress;
 }
 
-.title {
+header {
   font-family: 'Trirong', serif;
   font-weight: 300;
   font-size: 100px;
   text-align: center;
+  position: relative;
 }
 
 pre, code {
@@ -82,7 +84,7 @@ code {
   #mainarea {
     grid-template-columns: repeat(2, minmax($mincolwidth, 1fr));
 
-    div:nth-child(3) { grid-column: 1 / 3; }
+    :nth-child(3) { grid-column: 1 / 3; }
   }
 }
 
@@ -91,10 +93,10 @@ code {
     max-width: 600px;
     grid-template-columns: minmax($mincolwidth, 1fr);
 
-    div:nth-child(3) { grid-column: 1; }
+    :nth-child(3) { grid-column: 1; }
   }
 
-  .title {
+  header {
     font-size: 11vw;
   }
 }
@@ -119,7 +121,9 @@ code {
   border-top: 2px solid $textcol;
   border-bottom: 2px solid $textcol;
   padding: 8px 0 16px 0;
-  min-width: $mincolwidth;  // Fix grid "blowout" in older browsers.
+  // Following two lines fix grid "blowout" in older browsers.
+  min-width: $mincolwidth;
+  max-width: 100%;
 }
 
 h1 {
@@ -160,7 +164,7 @@ button {
   background: $bgcol;
   color: $textcol;
   padding: 8px;
-  font-size: inherit;
+  font-size: $font-size;
 }
 
 button > .pause-text, button.running > .play-text {
@@ -366,7 +370,51 @@ input[type=range]::-moz-range-track {
   @include input-range-track;
 }
 
+p {
+  margin: 0;
+  margin-bottom: $font-size;
+}
 
+#help-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+body #helpoverlay {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 0; bottom: 0; left: 0; right: 0;
+  border: 32px solid $bgcol;
+  background: $bgcol;
+  z-index: 100;
+
+  .titlearea {
+    flex: 0 0 auto;
+    display: flex;
+
+    :first-child { flex: 1 1 auto; }
+    :last-child { flex: 0 0 auto; }
+
+    #close-help-button { margin-right: 0; }
+  }
+
+  .helpcontents {
+    flex: 1 1 auto;
+    border: 2px solid $textcol;
+    padding: 8px;
+    overflow: auto;
+  }
+}
+
+body.help-shown {
+  overflow: hidden;
+
+  #helpoverlay {
+    display: flex;
+  }
+}
 
 .x1 { background: #e6f5d8; color: #000; }
 .x2 { background: #c1f0bf; color: #000; }

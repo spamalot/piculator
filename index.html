@@ -1,6 +1,22 @@
 ---
-layout: piculator
 ---
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% include head.html %}
+  {% include head_extras_piculator.html %}
+ </head>
+
+<body>
+
+<header>
+  {% include piculator_lettering.html %}
+  <button title="Help" id="help-button" onclick="showHelp()">
+    <i class="fas fa-question"></i>
+  </button>
+</header>
 
 <div id="mainarea">
 
@@ -61,12 +77,14 @@ layout: piculator
         name="Gauss-Legendre"
         link="Gauss-Legendre_algorithm"
         %}
+      {% comment %}
       {% include algo_button.html
         id="chudnovsky"
         name="Chudnovsky"
         link="Chudnovsky_algorithm"
         formula="$$\pi = \frac{1}{12\sum\limits_{k=0}^\infty \frac{(-1)^{k}(6k)!(13591409 + 545140134k)}{(3k)!(k!)^3(640320^{3k + \frac{3}{2}})}}$$"
         %}
+      {% endcomment %}
     </div>
 
   </div>
@@ -93,3 +111,25 @@ layout: piculator
   </noscript>
 
 </div>
+
+<div id="helpoverlay">
+
+  <div class="titlearea">
+    <h1>&pi;culator Help</h1>
+
+    <button id="close-help-button" title="Close Help" onclick="hideHelp()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="helpcontents">
+    {% include help.html %}
+  </div>
+
+</div>
+
+{% include footer.html %}
+
+</body>
+
+</html>
