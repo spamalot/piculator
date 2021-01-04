@@ -106,15 +106,13 @@ code {
 #mainarea.error {
   display: block;
 
-  * {
-    display: none;
-  }
+  .block { display: none; }
+}
 
-  #error-overlay {
-    display: block;
-    text-align: center;
-    font-weight: 700;
-  }
+#mainarea.error #error-overlay, #noscript-overlay {
+  display: block;
+  text-align: center;
+  font-weight: 700;
 }
 
 .block {

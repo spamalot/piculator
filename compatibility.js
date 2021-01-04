@@ -26,7 +26,7 @@
 function checkCompatibilityProblem() {
   var mainarea = document.getElementById('mainarea');
   var errorOverlay = document.getElementById('error-overlay');
-  var template = 'Error: MESSAGE Please upgrade your browser to use the &pi;culator.';
+  var template = 'MESSAGE Please upgrade your browser to use the &pi;culator.';
 
   if (window.document.documentMode) {
     // Running IE 9 - 11
