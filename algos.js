@@ -89,8 +89,8 @@ function mthRoot(A, m) {
 
 /**
  * Computes and returns the falling factorial x_(n) = x(x-1)...(x-n+1)
- * @param {Decimal} x (integer)
- * @param {Decimal} n (integer)
+ * @param {Decimal} x - (integer)
+ * @param {Decimal} n - (integer)
  * @returns {Decimal}
  */
 function fallingFactorial(x, n) {
@@ -100,7 +100,7 @@ function fallingFactorial(x, n) {
   const p1 = new Decimal('1');
   let prod = p1;
 
-  for (; adder.cmp(n) < 0; adder = adder.add(p1)) { 
+  for (; adder.cmp(n) < 0; adder = adder.add(p1)) {
     prod = prod.mul(x.sub(adder));
   }
 
@@ -135,11 +135,12 @@ function* pi_leibniz() {
   const p4 = new Decimal('4');
   let answer = new Decimal('0');
   for (let x = 0; x < loops; x++) {
-    x = new Decimal(x);
-    answer = answer.add(intPow(n1, x).div(x.mul(p2).add(p1)));
+    const xd = new Decimal(x);
+    answer = answer.add(intPow(n1, xd).div(xd.mul(p2).add(p1)));
     yield answer.mul(p4);
   }
 }
+
 
 function* pi_bailey_borwein_plouffe() {
   const p1 = new Decimal('1');
@@ -151,9 +152,9 @@ function* pi_bailey_borwein_plouffe() {
   const p1o16 = p1.div(new Decimal('16'));
   let answer = new Decimal('0');
   for (let x = 0; x < loops; x++) {
-    x = new Decimal(x);
-    const p8x = p8.mul(x);
-    answer = answer.add(intPow(p1o16, x).mul(
+    const xd = new Decimal(x);
+    const p8x = p8.mul(xd);
+    answer = answer.add(intPow(p1o16, xd).mul(
       p4.div(p8x.add(p1)).sub(
       p2.div(p8x.add(p4))).sub(
       p1.div(p8x.add(p5))).sub(
@@ -184,13 +185,21 @@ function* pi_borwein() {
     new Decimal('96049403338648032').mul(rt5)).sub(
     new Decimal('1296').mul(rt5).mul(mthRoot(new Decimal('10985234579463550323713318473').add(
     new Decimal('4912746253692362754607395912').mul(rt5)), p2)));
-  let answer = new Decimal('0');
-    for (let x = 0; x < loops; x++) {
-      x = new Decimal(x);
-      answer = answer.add(
-        factorial(p6.mul(x)).div( factorial(p3.mul(x)).mul( intPow(factorial(x), p3) )  ).mul( a.add(x.mul(b)).div( intPow(c, p3.mul(x)) )  )
-        );
-      yield mthRoot(intPow(c.neg(), p3), p2).div(answer);
+
+  const divider = mthRoot(intPow(c.neg(), p3), p2);
+  const cCubed = intPow(c, p3);
+
+  let answer = a;
+  let fact_term = new Decimal('1');
+    for (let x = 1; x < loops; x++) {
+      const xd = new Decimal(x);
+      fact_term = fact_term
+        .mul(fallingFactorial(p6.mul(xd), p6))
+        .div(fallingFactorial(p3.mul(xd), p3))
+        .div(intPow(xd, p3))
+        .div(cCubed);
+      answer = answer.add(fact_term.mul(a.add(xd.mul(b))));
+      yield divider.div(answer);
     }
 }
 
@@ -206,12 +215,12 @@ function* pi_borwein_nonic() {
   let r = mthRoot(p3, p2).sub(p1).div(p2);
   let s = mthRoot(p1.sub(intPow(r,p3)), p3);
   for (let x = 0; x < loops; x++) {
-    x = new Decimal(x);
+    const xd = new Decimal(x);
     const t = p1.add(p2.mul(r));
     const u = mthRoot(p9.mul(r).mul(p1.add(r).add(intPow(r, p2))), p3);
     const v = intPow(t, p2).add(t.mul(u)).add(intPow(u, p2));
     const w = p27.mul(p1.add(s).add(intPow(s, p2))).div(v);
-    a = w.mul(a).add(intPow(p3, p2.mul(x).sub(p1)).mul(p1.sub(w)));
+    a = w.mul(a).add(intPow(p3, p2.mul(xd).sub(p1)).mul(p1.sub(w)));
     s = intPow(p1.sub(r), p3).div(t.add(p2.mul(u)).mul(v));
     r = mthRoot(p1.sub(intPow(s, p3)), p3);
     yield p1.div(a);
@@ -239,33 +248,33 @@ function* pi_gauss_legendre() {
   }
 }
 
+
 function* chudnovsky() {
-  const divider = new Decimal('426880').mul(mthRoot(new Decimal('10005'), new Decimal('2')));
+  const p3 = new Decimal('3');
+  const p6 = new Decimal('6');
 
   const a = new Decimal('545140134');
   const b = new Decimal('13591409');
   const c = new Decimal('-262537412640768000');
-
-  const p0 = new Decimal('0');
-  const p1 = new Decimal('1');
-  const p3 = new Decimal('3');
-  const p6 = new Decimal('6');
+  const divider = new Decimal('426880').mul(mthRoot(new Decimal('10005'), new Decimal('2')));
 
   let sum = b;
-  let fact_term = p1;
+  let fact_term = new Decimal('1');
 
   for (let q = 1; q < loops; q++) {
-    let qd = new Decimal(q);
-    fact_term = fact_term.div(fallingFactorial(p3.mul(qd), p3));
-    fact_term = fact_term.div(qd.pow(p3));
-    fact_term = fact_term.div(c);
-    fact_term = fact_term.mul(fallingFactorial(p6.mul(qd), p6));
+    const qd = new Decimal(q);
+    fact_term = fact_term
+      .div(fallingFactorial(p3.mul(qd), p3))
+      .div(intPow(qd, p3))
+      .div(c)
+      .mul(fallingFactorial(p6.mul(qd), p6));
 
     sum = sum.add(fact_term.mul(a.mul(qd).add(b)));
 
     yield divider.div(sum);
   }
 }
+
 
 /**
  * Mapping between algorithm names as strings and the generator
