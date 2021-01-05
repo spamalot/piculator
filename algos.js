@@ -240,7 +240,6 @@ function* pi_gauss_legendre() {
 }
 
 function* chudnovsky() {
-
   const divider = new Decimal('426880').mul(mthRoot(new Decimal('10005'), new Decimal('2')));
 
   const a = new Decimal('545140134');
