@@ -88,6 +88,27 @@ function mthRoot(A, m) {
 
 
 /**
+ * Computes and returns the falling factorial x_(n) = x(x-1)...(x-n+1)
+ * @param {Decimal} x (integer)
+ * @param {Decimal} n (integer)
+ * @returns {Decimal}
+ */
+function fallingFactorial(x, n) {
+  // TODO: optimize factorial with caching?
+
+  let adder = new Decimal('0');
+  const p1 = new Decimal('1');
+  let prod = p1;
+
+  for (; adder.cmp(n) < 0; adder = adder.add(p1)) { 
+    prod = prod.mul(x.sub(adder));
+  }
+
+  return prod;
+}
+
+
+/**
  * Computes and returns n!.
  * @param {Decimal} n
  * @returns {Decimal}
@@ -218,6 +239,34 @@ function* pi_gauss_legendre() {
   }
 }
 
+function* chudnovsky() {
+
+  const divider = new Decimal('426880').mul(mthRoot(new Decimal('10005'), new Decimal('2')));
+
+  const a = new Decimal('545140134');
+  const b = new Decimal('13591409');
+  const c = new Decimal('-262537412640768000');
+
+  const p0 = new Decimal('0');
+  const p1 = new Decimal('1');
+  const p3 = new Decimal('3');
+  const p6 = new Decimal('6');
+
+  let sum = b;
+  let fact_term = p1;
+
+  for (let q = 1; q < loops; q++) {
+    let qd = new Decimal(q);
+    fact_term = fact_term.div(fallingFactorial(p3.mul(qd), p3));
+    fact_term = fact_term.div(qd.pow(p3));
+    fact_term = fact_term.div(c);
+    fact_term = fact_term.mul(fallingFactorial(p6.mul(qd), p6));
+
+    sum = sum.add(fact_term.mul(a.mul(qd).add(b)));
+
+    yield divider.div(sum);
+  }
+}
 
 /**
  * Mapping between algorithm names as strings and the generator
@@ -226,10 +275,10 @@ function* pi_gauss_legendre() {
  * @type {Object.<string, function>}
  */
 const algoMap = {
+  chudnovsky: chudnovsky,
   leibniz: pi_leibniz,
   bbp: pi_bailey_borwein_plouffe,
   borwein: pi_borwein,
   borwein_nonic: pi_borwein_nonic,
   gauss_legendre: pi_gauss_legendre,
 };
-
