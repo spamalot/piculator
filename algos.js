@@ -249,7 +249,7 @@ function* pi_gauss_legendre() {
 }
 
 
-function* chudnovsky() {
+function* pi_chudnovsky() {
   const p3 = new Decimal('3');
   const p6 = new Decimal('6');
 
@@ -276,6 +276,21 @@ function* chudnovsky() {
 }
 
 
+function* pi_zeta() {
+  const p1 = new Decimal('1');
+  const p2 = new Decimal('2');
+  const p6 = new Decimal('6');
+
+  let sum = new Decimal('0');
+  for (let q = 1; q < loops; q++) {
+    let qd = new Decimal(q);
+    sum = sum.add(p1.div(intPow(qd, p2)));
+
+    yield mthRoot(sum.mul(p6), p2);
+  }
+}
+
+
 /**
  * Mapping between algorithm names as strings and the generator
  * functions.
@@ -283,10 +298,11 @@ function* chudnovsky() {
  * @type {Object.<string, function>}
  */
 const algoMap = {
-  chudnovsky: chudnovsky,
+  chudnovsky: pi_chudnovsky,
   leibniz: pi_leibniz,
   bbp: pi_bailey_borwein_plouffe,
   borwein: pi_borwein,
   borwein_nonic: pi_borwein_nonic,
   gauss_legendre: pi_gauss_legendre,
+  zeta: pi_zeta,
 };
