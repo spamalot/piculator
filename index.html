@@ -51,10 +51,10 @@
     <h2>Algorithm</h2>
     <div class="algoarea">
       {% include algo_button.html
-        id="leibniz"
-        name="Leibniz"
-        link="Leibniz_formula_for_pi"
-        formula="$$\pi = 4\sum\limits_{k=0}^\infty \frac{(-1)^{k}}{2k + 1}$$"
+        id="bbp"
+        name="Bailey-Borwein-Plouffe"
+        link="Bailey-Borwein-Plouffe_formula"
+        formula="$$\pi = \sum\limits_{k=0}^\infty \left(\frac{1}{16^{k}}\left(\frac{4}{8k + 1} - \frac{2}{8k + 4} - \frac{1}{8k+5} - \frac{1}{8k + 6}\right)\right)$$"
         %}
       {% include algo_button.html
         id="borwein"
@@ -67,10 +67,10 @@
         link="Borwein's_algorithm#Nonic_convergence"
         %}
       {% include algo_button.html
-        id="bbp"
-        name="Bailey-Borwein-Plouffe"
-        link="Bailey-Borwein-Plouffe_formula"
-        formula="$$\pi = \sum\limits_{k=0}^\infty \left(\frac{1}{16^{k}}\left(\frac{4}{8k + 1} - \frac{2}{8k + 4} - \frac{1}{8k+5} - \frac{1}{8k + 6}\right)\right)$$"
+        id="chudnovsky"
+        name="Chudnovsky"
+        link="Chudnovsky_algorithm"
+        formula="$$\pi = \frac{426880\sqrt{10005}}{\sum^\infty_{q=0} \frac{(6q)! (545140134q + 13591409)}{(3q)!(q!)^3 \left(-262537412640768000\right)^{q}}}$$"
         %}
       {% include algo_button.html
         id="gauss_legendre"
@@ -78,10 +78,10 @@
         link="Gauss-Legendre_algorithm"
         %}
       {% include algo_button.html
-        id="chudnovsky"
-        name="Chudnovsky"
-        link="Chudnovsky_algorithm"
-        formula="$$\pi = \frac{426880\sqrt{10005}}{\sum^\infty_{q=0} \frac{(6q)! (545140134q + 13591409)}{(3q)!(q!)^3 \left(-262537412640768000\right)^{q}}}$$"
+        id="leibniz"
+        name="Leibniz"
+        link="Leibniz_formula_for_pi"
+        formula="$$\pi = 4\sum\limits_{k=0}^\infty \frac{(-1)^{k}}{2k + 1}$$"
         %}
       {% include algo_button.html
         id="zeta"

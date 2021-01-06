@@ -382,8 +382,8 @@ function onKeyPress(e) {
 function onLoaded() {
   document.getElementById('prec-500').checked = true;
   precChanged('500');
-  document.getElementById('algo-leibniz').checked = true;
-  algoChanged('leibniz');
+  document.getElementById('algo-chudnovsky').checked = true;
+  algoChanged('chudnovsky');
 
   playpause();
 
